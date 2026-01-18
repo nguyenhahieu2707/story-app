@@ -1,0 +1,22 @@
+package com.hiendao.coreui.theme
+
+import androidx.annotation.StringRes
+import androidx.annotation.StyleRes
+import com.hiendao.coreui.R
+
+enum class Themes(
+    val isLight: Boolean,
+    @StringRes val nameId: Int,
+    @StyleRes val themeId: Int,
+) {
+    LIGHT(
+        isLight = true,
+        nameId = R.string.theme_name_light,
+        themeId = R.style.AppTheme_Light,
+    ),
+    DARK(
+        isLight = false,
+        nameId = R.string.theme_name_dark,
+        themeId = R.style.AppTheme_BaseDark_Dark,
+    )
+}
