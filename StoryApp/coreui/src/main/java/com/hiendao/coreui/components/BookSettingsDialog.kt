@@ -1,0 +1,116 @@
+package com.hiendao.coreui.components
+
+import android.os.Parcelable
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.hiendao.coreui.R
+import com.hiendao.coreui.theme.ImageBorderShape
+import com.hiendao.coreui.theme.colorApp
+import com.hiendao.domain.model.Book
+import com.hiendao.domain.utils.rememberResolvedBookImagePath
+import kotlinx.parcelize.Parcelize
+
+
+sealed interface BookSettingsDialogState : Parcelable {
+    @Parcelize
+    data object Hide : BookSettingsDialogState
+
+    @Parcelize
+    data class Show(val book: Book) :
+        BookSettingsDialogState
+}
+
+@Composable
+fun BookSettingsDialog(
+    book: Book,
+    onDismiss: () -> Unit,
+    onToggleCompleted: () -> Unit,
+    onDelete: () -> Unit,
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = {
+            ImageView(
+                imageModel = rememberResolvedBookImagePath(
+                    bookUrl = book.url,
+                    imagePath = book.coverImageUrl
+                ),
+                error = R.drawable.default_book_cover,
+                modifier = Modifier
+                    .width(96.dp)
+                    .aspectRatio(1 / 1.45f)
+                    .clip(ImageBorderShape)
+            )
+        },
+        title = {
+            Text(text = book.title)
+        },
+        confirmButton = {},
+        text = {
+            androidx.compose.foundation.layout.Column {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .clickable(onClick = onToggleCompleted)
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Checkbox(
+                        checked = book.completed,
+                        onCheckedChange = null,
+                        colors = CheckboxDefaults.colors(
+                            checkedColor = MaterialTheme.colorApp.checkboxPositive,
+                            checkmarkColor = MaterialTheme.colorScheme.inverseOnSurface
+                        )
+                    )
+                    Text(
+                        text = stringResource(R.string.completed),
+                    )
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .clip(CircleShape)
+                        .clickable(onClick = onDelete)
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
+                    Icon(
+                        imageVector = androidx.compose.material.icons.Icons.Default.Delete,
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                    Text(
+                        text = stringResource(R.string.delete),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            }
+        },
+        containerColor = MaterialTheme.colorScheme.surface
+    )
+}
