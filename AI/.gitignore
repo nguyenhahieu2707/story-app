@@ -1,0 +1,31 @@
+# Python virtual environments
+myenv/
+venv/
+env/
+.venv/
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Model files (large files)
+model/
+*.pth
+*.pt
+*.ckpt
+*.safetensors
+
+# Environment variables and secrets
+.env
+APIkey.json
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Logs
+*.log
+
+# IDE settings
+.idea/
+.vscode/
